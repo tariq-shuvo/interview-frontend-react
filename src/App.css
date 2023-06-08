@@ -1,0 +1,9 @@
+.nav-link-color, .nav-link-color:hover{
+    color: white !important;
+    text-decoration: none;
+}
+
+.nav-link{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
