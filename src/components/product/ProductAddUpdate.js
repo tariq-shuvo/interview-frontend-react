@@ -1,7 +1,11 @@
 import React, { useState } from 'react'
-import { Button, Form } from 'react-bootstrap'
+import { Alert, Button, Form } from 'react-bootstrap'
+import { useDispatch, useSelector } from 'react-redux'
+import { addProductInfo, fetchAllProductInfo } from '../../util/productOperation'
 
 const ProductAddUpdate = () => {
+  const product = useSelector((state) => state.products)
+  const dispatch = useDispatch()
   const [formData, setFormData] = useState({
     title: '',
     price: '',
@@ -16,19 +20,22 @@ const ProductAddUpdate = () => {
 
   const onSubmit = e => {
     e.preventDefault()
-    console.log(formData);
-    // if (password !== password2) {
-    //   setAlert('Passwords do not matched', 'danger')
-    // } else {
-    //   register({name, email, password})
-    // }
+    let token = localStorage.getItem("token")
+    dispatch(addProductInfo(formData, token));
+    dispatch(fetchAllProductInfo())
   }
 
   return (
     <>
-      <Button variant="danger" type="button" size='sm' className='mt-3 float-right'>
-        Close
-      </Button>
+      <div className='mt-3'>
+        {product.info.errors?.map(errorInfo=><Alert key={errorInfo.param} variant='danger'>{errorInfo.msg}</Alert>)}
+        {product.info.success && <Alert key="success" variant='success'>{product.info.message}</Alert>}
+      </div>
+      <div className='float-right mb-3'>
+        <Button variant="danger" type="button" size='sm'>
+          Close
+        </Button>
+      </div>
       <Form className='mt-4' onSubmitCapture={e => onSubmit(e)}>
         <Form.Group controlId="formTitle" className='mt-3'>
           <Form.Label>Product Title</Form.Label>
@@ -42,9 +49,9 @@ const ProductAddUpdate = () => {
 
         <Form.Group controlId="formStatus" className='mt-3'>
           <Form.Label>Status</Form.Label>
-          <Form.Control as="select">
-            <option value="true" {...status===true && 'selected'}>Yes</option>
-            <option value="false" {...status===true && 'selected'}>No</option>
+          <Form.Control as="select" value={status} onChange={e => onChange(e)}>
+            <option value="true">Yes</option>
+            <option value="false">No</option>
           </Form.Control>
         </Form.Group>
         

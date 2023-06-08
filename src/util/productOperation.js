@@ -1,14 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { API_REQUEST } from "../../config/Constants";
+import { API_REQUEST } from "../config/Constants";
 
-export const fetchAllProductInfo = createAsyncThunk('propduct/fetchAllProductInfo', async (token)=>{
+export const fetchAllProductInfo = createAsyncThunk('propduct/fetchAllProductInfo', async ()=>{
     try {
         const response = await fetch(API_REQUEST + '/product', {
             method: 'GET',
             headers: {
               'Accept': 'application/json',
-              'Content-Type': 'application/json',
-              'x-auth-token': token
+              'Content-Type': 'application/json'
             }
           });
         const data = await response.json();
@@ -24,8 +23,7 @@ export const fetchSingleProductInfo = createAsyncThunk('propduct/fetchSingleProd
             method: 'GET',
             headers: {
               'Accept': 'application/json',
-              'Content-Type': 'application/json',
-              'x-auth-token': token
+              'Content-Type': 'application/json'
             }
           });
         const data = await response.json();
@@ -35,13 +33,14 @@ export const fetchSingleProductInfo = createAsyncThunk('propduct/fetchSingleProd
     }
 })
 
-export const addProductInfo = createAsyncThunk('auth/addProductInfo', async (productInfo)=>{
+export const addProductInfo = createAsyncThunk('auth/addProductInfo', async (productInfo, token)=>{
     try {
         const response = await fetch(API_REQUEST + '/product', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'x-auth-token': token
             },
             body: JSON.stringify(productInfo)
           });
@@ -52,13 +51,14 @@ export const addProductInfo = createAsyncThunk('auth/addProductInfo', async (pro
     }
 })
 
-export const updateProductInfo = createAsyncThunk('propduct/updateProductInfo', async (productID, productInfo)=>{
+export const updateProductInfo = createAsyncThunk('propduct/updateProductInfo', async (productID, productInfo, token)=>{
     try {
         const response = await fetch(API_REQUEST + `/product/${productID}`, {
             method: 'PUT',
             headers: {
               'Accept': 'application/json',
-              'Content-Type': 'application/json'
+              'Content-Type': 'application/json',
+              'x-auth-token': token
             },
             body: JSON.stringify(productInfo)
           });
@@ -69,13 +69,14 @@ export const updateProductInfo = createAsyncThunk('propduct/updateProductInfo', 
     }
 })
 
-export const deleteProductInfo = createAsyncThunk('propduct/deleteProductInfo', async (productID)=>{
+export const deleteProductInfo = createAsyncThunk('propduct/deleteProductInfo', async (productID, token)=>{
     try {
         const response = await fetch(API_REQUEST + '/product', {
             method: 'DELETE',
             headers: {
               'Accept': 'application/json',
-              'Content-Type': 'application/json'
+              'Content-Type': 'application/json',
+              'x-auth-token': token
             },
             body: JSON.stringify(productID)
           });
@@ -86,13 +87,14 @@ export const deleteProductInfo = createAsyncThunk('propduct/deleteProductInfo', 
     }
 })
 
-export const deleteBatchProductInfo = createAsyncThunk('propduct/deleteBatchProductInfo', async (productBatchIds)=>{
+export const deleteBatchProductInfo = createAsyncThunk('propduct/deleteBatchProductInfo', async (productBatchIds, token)=>{
     try {
         const response = await fetch(API_REQUEST + '/product/batch', {
             method: 'POST',
             headers: {
               'Accept': 'application/json',
-              'Content-Type': 'application/json'
+              'Content-Type': 'application/json',
+              'x-auth-token': token
             },
             body: JSON.stringify(productBatchIds)
           });
