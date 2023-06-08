@@ -1,4 +1,5 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
+import { fetchUserInfoData, loginUserData, registerUserData } from '../../util/authUser';
 
 const initialState = {
   isLoggedIn: true,
@@ -7,41 +8,51 @@ const initialState = {
   error: null,
 };
 
-export const fetchRandomUserData = createAsyncThunk(
-  'auth/fetchRandomUser',
-  async () => {
-    try {
-      const response = await fetch('https://randomuser.me/api/');
-      const data = await response.json();
-      return data.results[0];
-    } catch (error) {
-      throw Error(error);
-    }
-  }
-);
-
-console.log(fetchRandomUserData);
-
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    logout(state, action) {
+    logout(state, action){
       state.isLoggedIn = false;
+      state.user = null;
     },
   },
   extraReducers: {
-    [fetchRandomUserData.pending]: (state, action) => {
-      state.loading = true;
-      state.error = null;
+    [fetchUserInfoData.pending]: (state, action) => {
+        state.loading = true;
+        state.error = null
     },
-    [fetchRandomUserData.fulfilled]: (state, action) => {
-      state.user = action.payload;
-      state.loading = false;
+    [fetchUserInfoData.fulfilled]: (state, action) => {
+        state.user = action.payload;
+        state.loading = false;
     },
-    [fetchRandomUserData.rejected]: (state, action) => {
-      state.error = action.error.message;
-      state.loading = false;
+    [fetchUserInfoData.rejected]: (state, action) => {
+        state.error = action.error;
+        state.loading = false;
+    },
+    [registerUserData.pending]: (state, action) => {
+        state.loading = true;
+        state.error = null;
+    },
+    [registerUserData.fulfilled]: (state, action) => {
+        state.user = action.payload;
+        state.loading = false;
+    },
+    [registerUserData.rejected]: (state, action) => {
+        state.error = action.error;
+        state.loading = false;
+    },
+    [loginUserData.pending]: (state, action) => {
+        state.loading = true;
+        state.error = null
+    },
+    [loginUserData.fulfilled]: (state, action) => {
+        state.user = action.payload;
+        state.loading = false;
+    },
+    [loginUserData.rejected]: (state, action) => {
+        state.error = action.error;
+        state.loading = false;
     },
   },
 });
