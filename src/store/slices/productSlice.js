@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { logout } from './authSlice';
+// import { logout } from './authSlice';
 
 const initialState = {
   products: [],
@@ -27,9 +27,9 @@ const productsSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(logout, (state, action) => {
-      state.products = [];
-    });
+    // builder.addCase(logout, (state, action) => {
+    //   state.products = [];
+    // });
   },
 });
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Alert, Button, Form } from 'react-bootstrap'
 import {useDispatch, useSelector} from 'react-redux'
 import { useNavigate } from "react-router-dom"
-import { loginUserData } from '../../util/authUser'
+import { fetchUserInfoData, loginUserData } from '../../util/authUser'
 
 const Login = () => {
   const navigate = useNavigate();
@@ -15,15 +15,18 @@ const Login = () => {
   const dispatch = useDispatch()
 
   useEffect(()=>{
-    if(auth.user.success){
-      localStorage.setItem('token', auth.user.token);
-      setFormData({
-        username: '',
-        password: ''
-      })
+    if(auth.isLoggedIn){
+      if(auth.user?.token){
+        localStorage.setItem('token', auth.user.token);
+        setFormData({
+          username: '',
+          password: ''
+        })
+      }
+      dispatch(fetchUserInfoData(auth.user))
       navigate("/")
     }
-  }, [auth]);
+  }, [auth, dispatch]);
 
   const {username, password} = formData
 

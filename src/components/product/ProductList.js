@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import { Button, Col, Container, Row, Table } from 'react-bootstrap'
 import ProductDetails from './ProductDetails';
+import { useSelector } from 'react-redux';
 
 const ProductList = () => {
-  const [show, setShow] = useState(false);
+  const auth = useSelector((state) => state.auth)
+  const [show, setShow] = useState(false)
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -30,8 +32,12 @@ const ProductList = () => {
                   <td>@mdo</td>
                   <td>
                     <Button variant="primary" size='sm' className='mr-2' onClick={handleShow}>view</Button>
-                    <Button variant="success" size='sm' className='mr-2'>edit</Button>
-                    <Button variant="danger" size='sm'>delete</Button>
+                    {auth.isLoggedIn && (
+                      <>
+                        <Button variant="success" size='sm' className='mr-2'>edit</Button>
+                        <Button variant="danger" size='sm'>delete</Button>
+                      </>
+                    )}
                   </td>
                 </tr>
               </tbody>

@@ -6,8 +6,18 @@ import Home from "./screens/Home";
 import Authentication from "./screens/Authentication";
 import Contact from "./screens/Contact";
 import NoPage from "./screens/NoPage";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { fetchUserInfoData } from "./util/authUser";
 
 function App() {
+  const auth = useSelector((state) => state.auth)
+  const dispatch = useDispatch()
+
+  useEffect(()=>{
+    dispatch(fetchUserInfoData(auth.user))
+  }, [])
+
   return (
     <BrowserRouter>
       <Routes>
