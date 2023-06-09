@@ -34,14 +34,14 @@ export const fetchSingleProductInfo = createAsyncThunk('propduct/fetchSingleProd
     }
 })
 
-export const addProductInfo = createAsyncThunk('auth/addProductInfo', async (productInfo, token)=>{
+export const addProductInfo = createAsyncThunk('auth/addProductInfo', async (productInfo)=>{
     try {
         const response = await fetch(API_REQUEST + '/product', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'x-auth-token': token
+                'x-auth-token': localStorage.getItem("token")
             },
             body: JSON.stringify(productInfo)
           });
@@ -52,9 +52,9 @@ export const addProductInfo = createAsyncThunk('auth/addProductInfo', async (pro
     }
 })
 
-export const updateProductInfo = createAsyncThunk('propduct/updateProductInfo', async (productID, productInfo)=>{
+export const updateProductInfo = createAsyncThunk('propduct/updateProductInfo', async (productInfo)=>{
     try {
-        const response = await fetch(API_REQUEST + `/product/${productID}`, {
+        const response = await fetch(API_REQUEST + `/product/${productInfo.id}`, {
             method: 'PUT',
             headers: {
               'Accept': 'application/json',

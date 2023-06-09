@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { addProductInfo, deleteBatchProductInfo, deleteProductInfo, fetchAllProductInfo, fetchSingleProductInfo } from '../../util/productOperation';
+import { addProductInfo, deleteBatchProductInfo, deleteProductInfo, fetchAllProductInfo, fetchSingleProductInfo, updateProductInfo } from '../../util/productOperation';
 // import { logout } from './authSlice';
 
 const initialState = {
@@ -14,6 +14,9 @@ const productsSlice = createSlice({
   name: 'products',
   initialState,
   reducers: {
+    removeOperationalInfo(state, action){
+        state.operation = {} 
+    }
   },
   extraReducers: {
     [fetchAllProductInfo.pending]: (state, action) => {
@@ -52,6 +55,18 @@ const productsSlice = createSlice({
         state.error = action.error;
         state.loading = false;
     },
+    [updateProductInfo.pending]: (state, action) => {
+        state.loading = true;
+        state.error = null
+    },
+    [updateProductInfo.fulfilled]: (state, action) => {
+        state.operation = action.payload;
+        state.loading = false;
+    },
+    [updateProductInfo.rejected]: (state, action) => {
+        state.error = action.error;
+        state.loading = false;
+    },
     [deleteProductInfo.pending]: (state, action) => {
         state.loading = true;
         state.error = null
@@ -79,6 +94,6 @@ const productsSlice = createSlice({
   },
 });
 
-export const { addProduct, deleteProduct } = productsSlice.actions;
+export const { removeOperationalInfo } = productsSlice.actions;
 
 export default productsSlice.reducer;

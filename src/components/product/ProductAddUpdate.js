@@ -1,28 +1,69 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Alert, Button, Form } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import { addProductInfo, fetchAllProductInfo } from '../../util/productOperation'
+import { addProductInfo, updateProductInfo } from '../../util/productOperation'
 import _ from 'lodash'
+import { removeOperationalInfo } from '../../store/slices/productSlice'
 
-const ProductAddUpdate = () => {
+const ProductAddUpdate = (props) => {
   const operation = useSelector((state) => state.products.operation)
   const dispatch = useDispatch()
   const [formData, setFormData] = useState({
+    id: '',
     title: '',
     price: '',
     status: true,
     description: ''
   })
+  const {productUpdate, setProductUpdateInfo} = props
 
-  const {title, price, status, description} = formData
+  let {id, title, price, status, description} = formData
+
+  useEffect(()=>{
+    if(productUpdate.isUpdate){
+      setFormData({
+        id: productUpdate.productData._id,
+        title: productUpdate.productData.title,
+        price: productUpdate.productData.price,
+        status: productUpdate.productData.status,
+        description: productUpdate.productData.description
+      })
+    }else{
+      setFormData({
+        id: '',
+        title: '',
+        price: '',
+        status: '',
+        description: ''
+      })
+    }
+  }, [productUpdate])
 
   const onChange = e =>
     setFormData({...formData, [e.target.name]: e.target.value})
 
-  const onSubmit = e => {
+  const formReset = () => {
+    setFormData({
+      ...formData,
+      title: '',
+      price: '',
+      status: true,
+      description: ''
+    })
+  }  
+
+  const onSubmit = async e => {
     e.preventDefault()
     let token = localStorage.getItem("token")
-    dispatch(addProductInfo(formData, token));
+    if(productUpdate.isUpdate){
+      dispatch(updateProductInfo(formData))
+    }else{
+      dispatch(addProductInfo(formData, token))
+    }
+    formReset()
+    setTimeout(()=>{
+      dispatch(removeOperationalInfo())
+    }, 5000)
   }
 
   return (
@@ -32,11 +73,12 @@ const ProductAddUpdate = () => {
         {operation.success && <Alert key="success" variant='success'>{operation.message}</Alert>}
       </div>
       <div className='float-right mb-3'>
-        <Button variant="danger" type="button" size='sm'>
+        <Button variant="danger" type="button" size='sm' onClick={()=>setProductUpdateInfo({isVisible: false, productData: null, isUpdate: false})}>
           Close
         </Button>
       </div>
       <Form className='mt-4' onSubmitCapture={e => onSubmit(e)}>
+        <Form.Control type="hidden" name='id' value={id} onChange={e => onChange(e)}/>
         <Form.Group controlId="formTitle" className='mt-3'>
           <Form.Label>Product Title</Form.Label>
           <Form.Control type="text" placeholder="Product Title" name='title' value={title} onChange={e => onChange(e)}/>
@@ -49,7 +91,7 @@ const ProductAddUpdate = () => {
 
         <Form.Group controlId="formStatus" className='mt-3'>
           <Form.Label>Status</Form.Label>
-          <Form.Control as="select" value={status} onChange={e => onChange(e)}>
+          <Form.Control as="select" value={status} name='status' onChange={e => onChange(e)}>
             <option value="true">Yes</option>
             <option value="false">No</option>
           </Form.Control>
@@ -61,7 +103,7 @@ const ProductAddUpdate = () => {
         </Form.Group>
         
         <Button variant="primary" type="submit" className='mt-3 mr-2'>
-          Add
+          {productUpdate.isUpdate ? 'Update': 'Add'}
         </Button>
         <Button variant="info" type="reset" className='mt-3'>
           Reset

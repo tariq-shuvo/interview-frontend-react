@@ -3,19 +3,19 @@ import { Button, Col, Container, Row, Table } from 'react-bootstrap'
 import ProductDetails from './ProductDetails';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteBatchProductInfo, deleteProductInfo, fetchAllProductInfo, fetchSingleProductInfo } from '../../util/productOperation';
-import { API_REQUEST } from '../../config/Constants';
 
-const ProductList = () => {
+const ProductList = (props) => {
   const auth = useSelector((state) => state.auth)
   const products = useSelector((state) => state.products.products)
   const productInfo = useSelector((state) => state.products)
   const dispatch = useDispatch()
   const [show, setShow] = useState(false)
   const [brachProductID, setBrachProductID] = useState([])
+  const {productUpdate, setProductUpdateInfo} = props;
 
   useEffect(()=>{
     dispatch(fetchAllProductInfo())
-  }, [products])
+  }, [products, dispatch])
 
   const handleClose = () => setShow(false);
 
@@ -38,7 +38,7 @@ const ProductList = () => {
       }
     }else{
       if(!e.target.checked){
-        let updatedList = brachProductID.filter(productInfo=>productInfo._id!==markInfo.productID)
+        let updatedList = brachProductID.filter(productInfo=>productInfo._id !== markInfo.productID)
         setBrachProductID(updatedList)
         branchProductList = updatedList;
         e.target.checked = false
@@ -65,10 +65,10 @@ const ProductList = () => {
         {auth.isLoggedIn && (
             <Row className='justify-content-center'>
               <Col className='text-right'>
-                <Button variant="primary" type="button" className='mr-3 mt-4'>
+                <Button variant="primary" type="button" className='mr-3 mt-4' onClick={()=>setProductUpdateInfo({...productUpdate, isVisible: true, isUpdate: false, productData: null})}>
                   Add Product
                 </Button>
-                <Button variant="danger" type="button" className='mt-4' onClick={deleteBatchProduct} disabled={auth.loading}>
+                <Button variant="danger" type="button" className='mt-4' onClick={deleteBatchProduct} disabled={auth.loading || brachProductID.length === 0}>
                   Batch Delete
                 </Button>
               </Col>
@@ -80,7 +80,7 @@ const ProductList = () => {
               <thead>
                 <tr>
                   <th className='text-center'>
-                    <input type='checkbox' onChange={(e)=>setMarkup(e, {isAll: true, productID: null})} checked={productInfo.products.length > 0 && brachProductID.length == productInfo.products.length}/>
+                    <input type='checkbox' onChange={(e)=>setMarkup(e, {isAll: true, productID: null})} checked={productInfo.products.length > 0 && brachProductID.length === productInfo.products.length}/>
                   </th>
                   <th className='text-center'>#</th>
                   <th>Title</th>
@@ -99,12 +99,12 @@ const ProductList = () => {
                       <td className='text-center'>{index+1}</td>
                       <td>{productInfo.title}</td>
                       <td>{productInfo.price}</td>
-                      <td>{productInfo.satus == true ? 'active':'inactive'}</td>
+                      <td>{productInfo.status === true ? 'active':'inactive'}</td>
                       <td>
                         <Button variant="primary" size='sm' className='mr-2' onClick={()=>handleShow(productInfo._id)} disabled={auth.loading}>view</Button>
                         {auth.isLoggedIn && (
                           <>
-                            <Button variant="success" size='sm' className='mr-2'>edit</Button>
+                            <Button variant="success" size='sm' className='mr-2' onClick={()=>setProductUpdateInfo({productData: productInfo , isVisible: true, isUpdate: true})}>edit</Button>
                             <Button variant="danger" size='sm' onClick={()=>deleteSingleProduct(productInfo._id)} disabled={auth.loading}>delete</Button>
                           </>
                         )}

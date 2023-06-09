@@ -24,7 +24,7 @@ const ProductDetails = (props) => {
                   </tr>
                   <tr>
                     <th>Status</th>
-                    <td>{productInfo.data.satus?'active':'inactive'}</td>
+                    <td>{productInfo.data.status?'active':'inactive'}</td>
                   </tr>
                   <tr>
                     <th>Description</th>
