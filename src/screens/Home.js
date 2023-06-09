@@ -16,16 +16,6 @@ const Home = () => {
               <ProductAddUpdate />
             </Col>
           </Row>
-          <Row>
-            <Col className='text-right'>
-              <Button variant="primary" type="button" className='mr-3 mt-4'>
-                Add Product
-              </Button>
-              <Button variant="danger" type="button" className='mt-4' disabled>
-                Batch Delete
-              </Button>
-            </Col>
-          </Row>
         </Container>
       )}
       

@@ -2,9 +2,10 @@ import React, { useState } from 'react'
 import { Alert, Button, Form } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { addProductInfo, fetchAllProductInfo } from '../../util/productOperation'
+import _ from 'lodash'
 
 const ProductAddUpdate = () => {
-  const product = useSelector((state) => state.products)
+  const operation = useSelector((state) => state.products.operation)
   const dispatch = useDispatch()
   const [formData, setFormData] = useState({
     title: '',
@@ -22,14 +23,13 @@ const ProductAddUpdate = () => {
     e.preventDefault()
     let token = localStorage.getItem("token")
     dispatch(addProductInfo(formData, token));
-    dispatch(fetchAllProductInfo())
   }
 
   return (
     <>
       <div className='mt-3'>
-        {product.info.errors?.map(errorInfo=><Alert key={errorInfo.param} variant='danger'>{errorInfo.msg}</Alert>)}
-        {product.info.success && <Alert key="success" variant='success'>{product.info.message}</Alert>}
+        {!(_.isEmpty(operation.errors)) && operation.errors.map(errorInfo=><Alert key={errorInfo.param} variant='danger'>{errorInfo.msg}</Alert>)}
+        {operation.success && <Alert key="success" variant='success'>{operation.message}</Alert>}
       </div>
       <div className='float-right mb-3'>
         <Button variant="danger" type="button" size='sm'>

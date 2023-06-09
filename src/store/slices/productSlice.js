@@ -1,12 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { addProductInfo, fetchAllProductInfo, fetchSingleProductInfo } from '../../util/productOperation';
+import { addProductInfo, deleteBatchProductInfo, deleteProductInfo, fetchAllProductInfo, fetchSingleProductInfo } from '../../util/productOperation';
 // import { logout } from './authSlice';
 
 const initialState = {
   products: [],
   loading: false,
   error: null,
-  info: {}
+  operation: {},
+  info: {},
 };
 
 const productsSlice = createSlice({
@@ -44,10 +45,34 @@ const productsSlice = createSlice({
         state.error = null
     },
     [addProductInfo.fulfilled]: (state, action) => {
-        state.info = action.payload;
+        state.operation = action.payload;
         state.loading = false;
     },
     [addProductInfo.rejected]: (state, action) => {
+        state.error = action.error;
+        state.loading = false;
+    },
+    [deleteProductInfo.pending]: (state, action) => {
+        state.loading = true;
+        state.error = null
+    },
+    [deleteProductInfo.fulfilled]: (state, action) => {
+        state.info = action.payload;
+        state.loading = false;
+    },
+    [deleteProductInfo.rejected]: (state, action) => {
+        state.error = action.error;
+        state.loading = false;
+    },
+    [deleteBatchProductInfo.pending]: (state, action) => {
+        state.loading = true;
+        state.error = null
+    },
+    [deleteBatchProductInfo.fulfilled]: (state, action) => {
+        state.info = action.payload;
+        state.loading = false;
+    },
+    [deleteBatchProductInfo.rejected]: (state, action) => {
         state.error = action.error;
         state.loading = false;
     },
