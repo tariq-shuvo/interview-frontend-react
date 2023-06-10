@@ -36,19 +36,15 @@ const ProductList = (props) => {
         let promiseArray = products.map(productInfo=>branchProductList.push({_id: productInfo._id}));
         await Promise.all(promiseArray)
       }
+      setBrachProductID(branchProductList)
     }else{
       if(!e.target.checked){
         let updatedList = brachProductID.filter(productInfo=>productInfo._id !== markInfo.productID)
         setBrachProductID(updatedList)
-        branchProductList = updatedList;
-        e.target.checked = false
       }else{
-        branchProductList = brachProductID;
-        branchProductList.push({_id: markInfo.productID})
+        setBrachProductID([...brachProductID, {_id: markInfo.productID}])
       }
     }
-
-    setBrachProductID(branchProductList);
   }
 
   const deleteBatchProduct = async () => {
