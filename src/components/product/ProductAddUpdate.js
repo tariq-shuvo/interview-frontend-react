@@ -6,8 +6,8 @@ import _ from 'lodash'
 import { removeOperationalInfo } from '../../store/slices/productSlice'
 
 const ProductAddUpdate = (props) => {
-  const auth = useSelector((state) => state.auth)
   const operation = useSelector((state) => state.products.operation)
+  const productInfo = useSelector((state) => state.products)
   const dispatch = useDispatch()
   const [formData, setFormData] = useState({
     id: '',
@@ -64,7 +64,7 @@ const ProductAddUpdate = (props) => {
     }
     setTimeout(()=>{
       dispatch(removeOperationalInfo())
-    }, 3000)
+    }, 4000)
   }
 
   return (
@@ -103,7 +103,7 @@ const ProductAddUpdate = (props) => {
           <Form.Control as="textarea" rows={3} placeholder="Description" name='description' value={description} onChange={e => onChange(e)}/>
         </Form.Group>
         
-        <Button variant="primary" type="submit" className='mt-3 mr-2' disabled={auth.loading}>
+        <Button variant="primary" type="submit" className='mt-3 mr-2' disabled={productInfo.loading}>
           {productUpdate.isUpdate ? 'Update': 'Add'}
         </Button>
         <Button variant="info" type="reset" className='mt-3'>

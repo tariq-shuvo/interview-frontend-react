@@ -1,17 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { API_REQUEST } from "../config/Constants";
 
-export const fetchUserInfoData = createAsyncThunk('auth/fetchUserInfo', async (userInfo)=>{
-    let token = null
-    if(userInfo.token){
-        token = userInfo.token
-    }else {
-        token = localStorage.getItem("token")
-        if(!token){
-            localStorage.removeItem("token");
-            return null;
-        }
-    }
+export const fetchUserInfoData = createAsyncThunk('auth/fetchUserInfo', async ()=>{
+    let token = localStorage.getItem("token")
 
     try {
         const response = await fetch(API_REQUEST + '/user/auth', {
@@ -40,20 +31,23 @@ export const loginUserData = createAsyncThunk('auth/loginUser', async (loginInfo
             body: JSON.stringify(loginInfo)
           });
         const data = await response.json();
+        if(data.success){
+            localStorage.setItem("token", data.token)
+        }
         return data;
     } catch (error) {
         throw Error(error);
     }
 })
 
-export const logoutUserData = createAsyncThunk('auth/logoutUser', async (token)=>{
+export const logoutUserData = createAsyncThunk('auth/logoutUser', async ()=>{
     try {
         const response = await fetch(API_REQUEST + '/user/auth/logout', {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'x-auth-token': token
+                'x-auth-token': localStorage.getItem("token")
             }
           });
         const data = await response.json();

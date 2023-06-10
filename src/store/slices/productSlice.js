@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { addProductInfo, deleteBatchProductInfo, deleteProductInfo, fetchAllProductInfo, fetchSingleProductInfo, updateProductInfo } from '../../util/productOperation';
-// import { logout } from './authSlice';
 
 const initialState = {
   products: [],
@@ -49,6 +48,9 @@ const productsSlice = createSlice({
     },
     [addProductInfo.fulfilled]: (state, action) => {
         state.operation = action.payload;
+        if(action.payload.success){
+            state.products.push(action.payload.data);
+        }
         state.loading = false;
     },
     [addProductInfo.rejected]: (state, action) => {
@@ -61,6 +63,14 @@ const productsSlice = createSlice({
     },
     [updateProductInfo.fulfilled]: (state, action) => {
         state.operation = action.payload;
+        if(action.payload.success){
+            state.products = state.products.map(obj => {
+                if (obj._id === action.payload.data._id) {
+                    obj = action.payload.data
+                }
+                return obj;
+            });
+        }
         state.loading = false;
     },
     [updateProductInfo.rejected]: (state, action) => {
@@ -73,6 +83,9 @@ const productsSlice = createSlice({
     },
     [deleteProductInfo.fulfilled]: (state, action) => {
         state.info = action.payload;
+        if(action.payload.success){
+            state.products = state.products.filter(productInfo => productInfo._id !== action.payload.data._id);
+        }
         state.loading = false;
     },
     [deleteProductInfo.rejected]: (state, action) => {
@@ -85,6 +98,9 @@ const productsSlice = createSlice({
     },
     [deleteBatchProductInfo.fulfilled]: (state, action) => {
         state.info = action.payload;
+        if(action.payload.success){
+            state.products = action.payload.data;
+        }
         state.loading = false;
     },
     [deleteBatchProductInfo.rejected]: (state, action) => {

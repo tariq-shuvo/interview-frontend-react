@@ -9,21 +9,26 @@ import NoPage from "./screens/NoPage";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { fetchUserInfoData } from "./util/authUser";
+import PrivateRoute from "./components/routing/PrivateRoute";
 
 function App() {
   const auth = useSelector((state) => state.auth)
   const dispatch = useDispatch()
 
   useEffect(()=>{
-    dispatch(fetchUserInfoData(auth.user))
-  }, [])
+    dispatch(fetchUserInfoData())
+  }, [dispatch])
 
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path="auth" element={<Authentication />} />
+          <Route path="auth" element={
+            <PrivateRoute auth={auth}>
+              <Authentication/>
+            </PrivateRoute>
+          } />
           <Route path="contact" element={<Contact />} />
           <Route path="*" element={<NoPage />} />
         </Route>

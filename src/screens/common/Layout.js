@@ -9,8 +9,10 @@ const Layout = () => {
   const dispatch = useDispatch();
 
   const userLogout = () =>{
-    localStorage.removeItem("token");
     dispatch(logoutUserData());
+    setTimeout(()=>{
+      localStorage.removeItem("token");
+    }, 2000)
   }
 
   return (

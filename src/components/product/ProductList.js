@@ -15,7 +15,7 @@ const ProductList = (props) => {
 
   useEffect(()=>{
     dispatch(fetchAllProductInfo())
-  }, [products, dispatch])
+  }, [dispatch])
 
   const handleClose = () => setShow(false);
 

@@ -83,7 +83,7 @@ const Register = () => {
           <Form.Control type="password" placeholder="Confirm Password" name='confirm_password' value={confirm_password} onChange={e => onChange(e)}/>
         </Form.Group>
         
-        <Button variant="primary" type="submit" className='mt-3' disabled={auth.loading}>
+        <Button variant="primary" type="submit" className='mt-3 mb-5' disabled={auth.loading}>
           Register
         </Button>
       </Form>
