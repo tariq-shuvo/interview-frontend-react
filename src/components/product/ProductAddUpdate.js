@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Alert, Button, Form } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
+import PropTypes from 'prop-types'
 import { addProductInfo, updateProductInfo } from '../../util/productOperation'
 import _ from 'lodash'
 import { removeOperationalInfo } from '../../store/slices/productSlice'
@@ -106,12 +107,19 @@ const ProductAddUpdate = (props) => {
         <Button variant="primary" type="submit" className='mt-3 mr-2' disabled={productInfo.loading}>
           {productUpdate.isUpdate ? 'Update': 'Add'}
         </Button>
-        <Button variant="info" type="reset" className='mt-3'>
-          Reset
-        </Button>
+        {!productUpdate.isUpdate && (
+          <Button variant="info" type="reset" className='mt-3' onClick={formReset}>
+            Reset
+          </Button>
+        )}
       </Form>
     </>
   )
+}
+
+ProductAddUpdate.propTypes = {
+  productUpdate: PropTypes.object.isRequired,
+  setProductUpdateInfo: PropTypes.func.isRequired
 }
 
 export default ProductAddUpdate

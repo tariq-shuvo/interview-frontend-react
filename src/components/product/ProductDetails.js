@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import React from 'react'
 import { Button, Modal, Table } from 'react-bootstrap'
+import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
 
 const ProductDetails = (props) => {
@@ -41,6 +42,11 @@ const ProductDetails = (props) => {
         </Modal.Footer>
     </Modal>
   )
+}
+
+ProductDetails.propTypes = {
+  show: PropTypes.bool.isRequired,
+  handleClose: PropTypes.func.isRequired
 }
 
 export default ProductDetails

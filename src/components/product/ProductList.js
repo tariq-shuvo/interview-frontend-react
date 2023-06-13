@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Button, Col, Container, Row, Table } from 'react-bootstrap'
 import ProductDetails from './ProductDetails';
 import { useDispatch, useSelector } from 'react-redux';
+import PropTypes from 'prop-types'
 import { deleteBatchProductInfo, deleteProductInfo, fetchAllProductInfo, fetchSingleProductInfo } from '../../util/productOperation';
 
 const ProductList = (props) => {
@@ -121,6 +122,11 @@ const ProductList = (props) => {
       <ProductDetails show={show} handleClose={handleClose}/>
     </>
   )
+}
+
+ProductList.propTypes = {
+  productUpdate: PropTypes.object.isRequired,
+  setProductUpdateInfo: PropTypes.func.isRequired
 }
 
 export default ProductList
